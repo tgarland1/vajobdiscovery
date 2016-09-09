@@ -18,7 +18,7 @@ class PredictiveModels:
     def __init__(self):
         # get data on jobs and relevant skills
         #todo: load data on github
-        skill_df = pd.read_csv(r'/home/ubuntu/vadatathon/DataVA-datathon/datava/static/skills_df.txt')
+        skill_df = pd.read_csv(r"./static/skills_df.txt")
         self.job_names_map = skill_df[['O*NET-SOC Code','detailed']]
 
         self.model = self.build_model(skill_df)

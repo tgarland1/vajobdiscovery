@@ -9,7 +9,7 @@ from models import JobLocations, JobOccupationCategories
 
 # initiate database connection
 #engine = create_engine('sqlite:///C:\\Users\\shebashir\\Desktop\\Datathon\\Data\\job_locations.db')
-engine = create_engine('sqlite:////home/ubuntu/vadatathon/DataVA-datathon/job_locations.db')
+engine = create_engine('sqlite:///../../job_locations.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 

@@ -32,5 +32,5 @@ class JobOccupationCategories(Base):
 
 
 #engine = create_engine('sqlite:///C:\\Users\\shebashir\\Desktop\\Datathon\\Data\\job_locations.db')
-engine = create_engine('sqlite:////home/ubuntu/vadatathon/DataVA-datathon/job_locations.db')
+engine = create_engine('sqlite:///../../job_locations.db')
 Base.metadata.create_all(engine)

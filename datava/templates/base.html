@@ -25,11 +25,11 @@
         <div class="collapse navbar-collapse navbar-inverse" id="bs-example-navbar-collapse-1">
 
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="\">Home<span class="sr-only">(current)</span></a></li>
-            <li><a href="/skills_survey">Occupation Recommendations<span class="sr-only">(current)</span></a></li>            
-            <li><a href="/job">Career Outlook<span class="sr-only">(current)</span></a></li>
-            <li><a href="/education">Job Supply/Demand<span class="sr-only">(current)</span></a></li>
-            <li><a href="/initial_map">Evaluate Your Commute<span class="sr-only">(current)</span></a></li>
+            <li {% if request.path == '/' %}class="active"{% endif %}><a href="/">Home<span class="sr-only">(current)</span></a></li>
+            <li {% if request.path == '/skills_survey/' %}class="active"{% endif %}><a href="/skills_survey">Occupation Recommendations<span class="sr-only">(current)</span></a></li>            
+            <li {% if request.path == '/job/' %}class="active"{% endif %}><a href="/job">Career Outlook<span class="sr-only">(current)</span></a></li>
+            <li {% if request.path == '/education/' %}class="active"{% endif %}><a href="/education">Job Supply/Demand<span class="sr-only">(current)</span></a></li>
+            <li {% if request.path == '/initial_map/' %}class="active"{% endif %}><a href="/initial_map">Evaluate Your Commute<span class="sr-only">(current)</span></a></li>
           </ul>
 
 
@@ -62,7 +62,7 @@
     <div class="container-fluid" style="padding:0px">
         {% block page_content %}{% endblock %}
     </div>
-
+<!--
     <script>
 
 $(function()
@@ -74,4 +74,5 @@ $(function()
 });
 
 </script>
+-->
 {% endblock %}

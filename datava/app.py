@@ -24,7 +24,7 @@ bootstrap = Bootstrap(app)
 #CsrfProtect(app)
 
 # initiate database connection
-engine = create_engine('sqlite:////home/ubuntu/vadatathon/DataVA-datathon/job_locations.db')
+engine = create_engine('sqlite:///../job_locations.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -35,7 +35,7 @@ initial_location = {'lat': 37.5412607, 'lng': -77.4341621}
 locality = ''
 
 ### import skill survey data
-skill_names = pd.read_csv(r'/home/ubuntu/vadatathon/DataVA-datathon/datava/static/skills_df.txt')
+skill_names = pd.read_csv('./static/skills_df.txt')
 skill_names_list = skill_names.columns[1:]
 occupation_prediction = PredictiveModels()
 names_and_ids = DataUsaNamesAndIds()
@@ -331,4 +331,4 @@ def create_locations_list(job_loc):
 
 if __name__ == "__main__":
     app.debug = True
-    app.run()
+    app.run('0.0.0.0')
