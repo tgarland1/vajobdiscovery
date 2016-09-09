@@ -1,0 +1,382 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block title %}Datathon{% endblock %}
+
+{% block page_content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+    
+    /*html,
+    body {
+         height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+*/
+   
+    .container {
+       /* height: 90%;        
+        position: relative;
+        padding:0;*/
+        /*width: 100%;*/
+      }
+
+
+      input {
+        font-size: 12px;
+      }     
+
+
+      h1 {
+        color: #525454;
+        font-size: 22px;
+        margin: 0 0 10px 0;
+        text-align: center;
+      }
+
+      #hide-listings,
+      #show-listings {
+        width: 40%;
+      }
+    
+
+      .sideBar
+      {
+        padding:10px;
+        height:90vh;
+      }
+
+      .sideBar h4{
+        text-align: left;
+        text-transform: uppercase;
+      }
+
+      .sideBar hr {
+        background: #D0D7D9;
+        height: 1px;
+        border: none;
+      }
+
+
+      #map {
+        bottom:0px;
+        height: 100%;
+        left: 275px;
+        position:absolute;
+        right: 0px;
+      }
+
+      .options-box {
+        background: #fff;
+        border-radius: 3px;
+        height: 100%;
+        line-height: 35px;
+        padding: 10px 10px 30px 10px;
+        text-align: left;
+        width: 275px;
+      }
+
+      #occupation_categories {
+        overflow: scroll;
+        position: relative;
+        height: 450px;
+      }
+
+      #pano {
+        width: 200px;
+        height: 200px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="options-box">
+        <div>
+          <input id="show-listings" type="button" value="Show Listings">
+          <input id="hide-listings" type="button" value="Hide Listings">
+        </div>
+        <hr>
+
+        <div>
+          <form method="POST" >
+            <input id="zoom-to-area-text" name="zoom-to-area-text" type="text" placeholder="Where do you live?">
+            <input id="zoom-to-area" type="submit" value="Enter">
+          </form>
+        </div>
+        <hr>
+
+        <div id="occupation_categories">
+          <form action="{{ url_for('filter_jobs') }}" method="POST" >
+            <input id="job_categories" type="submit" style="width: 220px" value="Filter Jobs">
+            <br>
+            <input type="checkbox" name="job_category_1" value="Management Occupations">Management<br>
+            <input type="checkbox" name="job_category_2" value="Computer and Mathematical Occupations">Computer and Mathematical<br>
+            <input type="checkbox" name="job_category_3" value="Architecture and Engineering Occupations">Architecture and Engineering<br>
+            <input type="checkbox" name="job_category_4" value="Life, Physical, and Social Science Occupations">Life, Physical, and Social Science<br>
+            <input type="checkbox" name="job_category_5" value="Community and Social Service Occupations">Community and Social Service<br>
+            <input type="checkbox" name="job_category_6" value="Legal Occupations">Legal<br>
+            <input type="checkbox" name="job_category_7" value="Education, Training, and Library Occupations">Education, Training, and Library<br>
+            <input type="checkbox" name="job_category_8" value="Arts, Design, Entertainment, Sports, and Media Occupations">Arts, Design, Entertainment, Sports, and Media<br>
+            <input type="checkbox" name="job_category_9" value="Healthcare Practitioners and Technical Occupations">Healthcare Practitioners and Technical<br>
+            <input type="checkbox" name="job_category_10" value="Healthcare Support Occupations">Healthcare Support<br>
+            <input type="checkbox" name="job_category_11" value="Protective Service Occupations">Protective Service<br>
+            <input type="checkbox" name="job_category_12" value="Food Preparation and Serving Related Occupations">Food Preparation and Serving Related<br>
+            <input type="checkbox" name="job_category_13" value="Building and Grounds Cleaning and Maintenance Occupations">Building and Grounds Cleaning and Maintenance<br>
+            <input type="checkbox" name="job_category_14" value="Personal Care and Service Occupations">Personal Care and Service<br>
+            <input type="checkbox" name="job_category_15" value="Sales and Related Occupations">Sales and Related<br>
+            <input type="checkbox" name="job_category_16" value="Office and Administrative Support Occupations">Office and Administrative Support<br>
+            <input type="checkbox" name="job_category_17" value="Farming, Fishing, and Forestry Occupations">Farming, Fishing, and Forestry<br>
+            <input type="checkbox" name="job_category_18" value="Construction and Extraction Occupations">Construction and Extraction<br>
+            <input type="checkbox" name="job_category_19" value="Installation, Maintenance, and Repair Occupations">Installation, Maintenance, and Repair<br>
+            <input type="checkbox" name="job_category_20" value="Production Occupations">Production<br>
+            <input type="checkbox" name="job_category_21" value="Transportation and Material Moving Occupations">Transportation and Material Moving<br>
+            <input type="checkbox" name="job_category_22" value="Military Specific Occupations">Military Specific<br>
+          </form>
+        </div>
+
+
+      </div>
+      <div id="map" style="height:93vh;"></div>
+    </div>
+
+
+    <script>
+
+/*      var getLocationData = function() {
+        $.ajax({
+        url: ,
+        data: data,
+        success: success,
+        dataType: dataType
+      });
+      }
+*/
+      var map;
+      // Create a new blank array for all the listing markers.
+      var markers = [];
+
+      // over the number of places that show.
+      var placeMarkers = [];
+      function initMap() {
+
+        // Constructor creates a new map - only center and zoom are required.
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: JSON.parse('{{ users_address|safe }}' ),
+          zoom: 18,
+          mapTypeControl: false
+        });
+
+        // This autocomplete is for use in the geocoder entry box.
+        var zoomAutocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('zoom-to-area-text'));
+
+      var locations = JSON.parse('{{ locations|safe }}')
+      var largeInfowindow = new google.maps.InfoWindow();
+
+      // Style the markers a bit. This will be our listing marker icon.
+      var defaultIcon = makeMarkerIcon('00A3E0');
+
+      // Create a "highlighted location" marker color for when the user
+      // mouses over the marker.
+      var highlightedIcon = makeMarkerIcon('C4D600');
+
+        // The following group uses the location array to create an array of markers on initialize.
+        for (var i = 0; i < locations.length; i++) {
+          // Get the position from the location array.
+          var position = locations[i].location;
+          var title = locations[i].title;
+
+          // Create a marker per location, and put into markers array.
+          if (i == 0) {
+            var marker = new google.maps.Marker({
+              position: position,
+              title: title,
+              animation: google.maps.Animation.DROP,
+              icon: makeMarkerIcon('C4D600'),
+              id: i
+            });
+          } else {
+            var marker = new google.maps.Marker({
+              position: position,
+              title: title,
+              animation: google.maps.Animation.DROP,
+              icon: defaultIcon,
+              id: i
+            });
+
+            // Two event listeners - one for mouseover, one for mouseout,
+            // to change the colors back and forth.
+            marker.addListener('mouseover', function() {
+              this.setIcon(highlightedIcon);
+            });
+            marker.addListener('mouseout', function() {
+              this.setIcon(defaultIcon);
+            });
+          }
+
+          // Push the marker to our array of markers.
+          markers.push(marker);
+          // Create an onclick event to open the large infowindow at each marker.
+          marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow, locations);
+
+
+          });
+        }
+
+        document.getElementById('show-listings').addEventListener('click', showListings);
+        // show all nearby job listings by default after user types in their address
+        showListings();
+
+        document.getElementById('hide-listings').addEventListener('click', function() {
+          hideMarkers(markers);
+        });
+
+        document.getElementById('zoom-to-area').addEventListener('click', function() {
+          zoomToArea();
+        });
+       };
+
+      // This function populates the infowindow when the marker is clicked. We'll only allow
+      // one infowindow which will open at the marker that is clicked, and populate based
+      // on that markers position.
+      function populateInfoWindow(marker, infowindow, locations) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          // Clear the infowindow content to give the streetview time to load.
+          infowindow.setContent('');
+          infowindow.marker = marker;
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+          // In case the status is OK, which means the pano was found, compute the
+          // position of the streetview image, then calculate the heading, then get a
+          // panorama from that and set the options
+          function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+              var nearStreetViewLocation = data.location.latLng;
+
+              // Initialize the distance matrix service.
+              var distanceMatrixService = new google.maps.DistanceMatrixService;
+              var home_address = locations[0].location
+              var job_address = {'lat':marker.position.lat(),'lng':marker.position.lng()}
+              var distanceMatrix = distanceMatrixService.getDistanceMatrix({
+                                    origins: [home_address],
+                                    destinations: [job_address],
+                                    travelMode: 'DRIVING',
+                                    }, function(response, status) {
+                                      if (status !== google.maps.DistanceMatrixStatus.OK) {
+                                        window.alert('Error was: ' + status);
+                                      } else {
+                                        //displayMarkersWithinTime(response);
+                                      }
+                                  });
+
+              var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div><form action="{{ url_for('nearby_places') }}" method="POST" ><br><div>Distance: {{distance}}</div><div>Time: {{minutes_away}}</div><br><input type="checkbox" name="job_title" value="' + marker.title + '" checked style="display:none;"><input name="search_criteria" type="text" placeholder="Search for surrounding businesses" style="width:100%;"><br><input id="nearbyPlaces" type="submit" value="search nearby places" style="width:100%;"></form></div><br><div id="pano" style="width:100%"></div>');
+                var panoramaOptions = {
+                  position: nearStreetViewLocation,
+                  pov: {
+                    heading: heading,
+                    pitch: 30
+                  }
+                };
+              var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), panoramaOptions);
+            } else {
+              infowindow.setContent('<div>' + marker.title + '</div>' +
+                '<div>No Street View Found</div>');
+            }
+          }
+          // Use streetview service to get the closest streetview image within
+          // 50 meters of the markers position
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+          // Open the infowindow on the correct marker.
+          infowindow.open(map, marker);
+        }
+      }
+
+
+        // This function will loop through the markers array and display them all.
+        function showListings() {
+          var bounds = new google.maps.LatLngBounds();
+          // Extend the boundaries of the map for each marker and display the marker
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          }
+          map.fitBounds(bounds);
+        }
+
+        // This function will loop through the listings and hide them all.
+        function hideMarkers(markers) {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+          }
+        }
+
+      // This function takes in a COLOR, and then creates a new marker
+      // icon of that color. The icon will be 21 px wide by 34 high, have an origin
+      // of 0, 0 and be anchored at 10, 34).
+      function makeMarkerIcon(markerColor) {
+        var markerImage = new google.maps.MarkerImage(
+          'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+          '|40|_|%E2%80%A2',
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34),
+          new google.maps.Size(21,34));
+        return markerImage;
+      }
+
+      // This function takes the input value in the find nearby area text input
+      // locates it, and then zooms into that area. This is so that the user can
+      // show all listings, then decide to focus on one area of the map.
+      function zoomToArea() {
+        // Initialize the geocoder.
+        var geocoder = new google.maps.Geocoder();
+        // Get the address or place that the user entered.
+        var address = document.getElementById('zoom-to-area-text').value;
+        // Make sure the address isn't blank.
+        if (address == '') {
+          window.alert('You must enter an area, or address.');
+        } else {
+          // Geocode the address/area entered to get the center. Then, center the map
+          // on it and zoom in
+          geocoder.geocode(
+            { address: address}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(8);
+              } else {
+                window.alert('We could not find that location - try entering a more' +
+                    ' specific place.');
+              }
+            });
+          }
+        }
+
+
+    </script>
+
+    <script async defer
+      src=
+        "https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyBSEvXEo6Tuts7fso0Y8-RPeDkTBX-p0GY&v=3&callback=initMap">
+    </script>
+
+  </body>
+</html>
+{% endblock %}
+

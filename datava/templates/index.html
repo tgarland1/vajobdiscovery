@@ -1,0 +1,100 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block title %}Datathon{% endblock %}
+
+{% block page_content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datathon Home Page</title>
+</head>
+<body class="container">
+
+
+<div class="container bg-1 text-center" style="margin-bottom:40px;">
+  <div class="row">
+  	
+  	<div class="col-sm-5">
+  		<h2 style="text-align:left; color: #0076A8;">VA Datathon</h2>
+  		<hr>
+  		<img src="/static/images/logo_datavirginia.png" class="img-responsive" alt="Data Virginia Logo" style="width:100%;">
+
+  	</div>
+
+	<div class="row col-sm-7">
+		<h2 style="text-align:left; color: #0076A8;">The Partnership</h2>
+  		<hr>
+		<div class="col-sm-6">
+			<div>
+				<img src="/static/images/logo_homePage.png" class="img-responsive col-sm-12" alt="Deloitte">
+				<br class="clearfix">
+				<p style="text-align: justify; margin-top:150px;">Major challenges for workforce planning include recruiting, retention, organization design, learning development, compensation, and benefits. Deloitte’s integrated approach provides insight into which talent segments deliver high returns and need greater investment. To help make it happen, Deloitte Consulting LLP offers services in the following areas:
+					<ul style="text-align:left;">
+						<li>Talent management</li>
+						<li>HR technology</li>
+						<li>Workforce analytics</li>
+						<li>Demand planning</li>
+						<li>Labor economics</li>
+					</ul>				
+				</p>				
+			</div>
+			<div style="margin-top:20px; text-align:right;">
+				<h4 style="color: #0076A8; font-weight: 700;">Want to learn more?</h4>
+				<p><a href="http://www2.deloitte.com/us/en.htm" target="_blank">http://www2.deloitte.com/us/en.htm</a></p>
+			</div>
+		</div>
+
+		<div class="col-sm-6">
+			<div>
+				<img src="/static/images/GMURGB.jpg" class="img-responsive col-sm-12" alt="GMU"">
+				<br class="clearfix">
+				<p style="text-align: justify; margin-top:150px;">George Mason University’s Volgenau School of Engineering was founded in 1985 as George Mason University’s School of Information Technology and Engineering. Today, this large, multidisciplinary school maintains a dual pre-eminence in both information technology and engineering. Through teaching, research, and practice, Volgenau seeks to graduate students who will take initiative, step up and leave the planet better than they found it.
+				</p>
+			</div>
+			<div style="margin-top:87px; text-align:right;">
+				<h4 style="color: #0076A8; font-weight: 700;">Want to learn more?</h4>
+				<p><a href="https://volgenau.gmu.edu/" target="_blank">https://volgenau.gmu.edu/</a></p>
+			</div>
+	  	</div>
+	  	
+  	</div>
+  </div>
+
+</div>
+
+<div class="container section-bg text-center">
+  <div class="row">
+    
+    <div class="col-sm-3 menuBox">      
+      <a href="/skills_survey"><img src="/static/images/survey6.jpg" class="img-responsive" style="width:100%" alt="Image"></a>
+      <a href="/skills_survey"><h1>Occupation Recommendations</h1></a>
+      <p style="margin-top:10px;">Take a survey to discover your career potential.</p>
+    </div>
+  
+    <div class="col-sm-3 menuBox">      
+      <a href="/job"><img src="/static/images/chart_2_new.jpg" class="img-responsive" style="width:100%" alt="Image"></a>
+      <a href="/job"><h1>Career Outlook</h1></a>
+      <p style="margin-top:10px;">Research what's next in your career.</p>
+    </div>
+
+    <div class="col-sm-3 menuBox">      
+      <a href="/education"><img src="/static/images/chart_1_new.jpg" class="img-responsive" style="width:100%" alt="Image"></a>
+      <a href="/education"><h1>Job Supply / Demand</h1></a>
+      <p style="margin-top:10px;">Look at what supply and demand looks like in your occupation. </p>
+    </div>
+
+  <div class="col-sm-3 menuBox">      
+      <a href="/initial_map"><img src="/static/images/map.jpg" class="img-responsive" style="width:100%" alt="Image"></a>
+      <a href="/initial_map"><h1>Evaluate Your Commute</h1></a>
+      <p style="margin-top:10px;">Determine what your commute will look like and identify points of interest nearby.</p>
+    </div>
+
+
+  </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

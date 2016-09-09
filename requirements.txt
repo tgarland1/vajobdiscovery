@@ -1,0 +1,10 @@
+pandas
+requests
+flask
+flask_wtf
+wtforms 
+flask_bootstrap 
+flask_sqlalchemy 
+googlemaps
+sqlalchemy
+sklearn

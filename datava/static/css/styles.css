@@ -1,0 +1,63 @@
+body{
+    background-color:#FFF;
+    font-family: 'Open Sans', sans-serif;
+    font-size:14px;
+    color:#333;
+}
+
+.navbar-default
+{
+	/*background-color:transparent;*/
+	background-color:#222;
+	border:none;
+}
+
+/* selector not working */
+#bs-example-navbar-collapse-1
+{
+	background-color:000;
+}
+
+.navbar {
+	/*border-radius: 0px;*/
+}
+
+.nav .active
+{
+	border-top:6px solid #C4D600;
+}
+
+.section-bg
+{
+	/*background-color:#DDEFE8;*/
+	text-align:justify;
+	padding:10px 30px;
+}
+
+.menuBox h1
+{    
+	color: #000;
+    font-size: 18px;
+    text-align: left;
+    line-height: 22px;
+}
+
+.menuBox
+{
+  height:350px;
+  margin:0px;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.menuBox:hover
+{
+  cursor:pointer;
+}
+
+.menuBox img
+{
+  height:auto;
+  max-width:98%;
+  border:1px solid #222;
+}
